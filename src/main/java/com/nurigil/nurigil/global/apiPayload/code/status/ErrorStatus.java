@@ -1,7 +1,7 @@
 package com.nurigil.nurigil.global.apiPayload.code.status;
 
-import B1G4.bookmark.apiPayload.code.BaseErrorCode;
-import B1G4.bookmark.apiPayload.code.ErrorReasonDTO;
+import com.nurigil.nurigil.global.apiPayload.code.BaseErrorCode;
+import com.nurigil.nurigil.global.apiPayload.code.ErrorReasonDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
