@@ -65,7 +65,7 @@ jobs:
               --name nurigil-container \
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=prod \
-              -e POSTGRES_DEPLOY_DB_USERNAME="${{ secrets.POSTGRES_DEPLOY_DB_USERNAME }}" \
-              -e POSTGRES_DEPLOY_DB_PW="${{ secrets.POSTGRES_DEPLOY_DB_PW }}" \
+              -e POSTGRES_DEPLOY_DB_USERNAME="${{ secrets.DEPLOY_DB_USERNAME }}" \
+              -e POSTGRES_DEPLOY_DB_PW="${{ secrets.DEPLOY_DB_PW }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
           
