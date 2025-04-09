@@ -66,6 +66,6 @@ jobs:
               -p 8080:8080 \
               -e SPRING_PROFILES_ACTIVE=prod \
               -e POSTGRES_DEPLOY_DB_USERNAME="${{ secrets.DEPLOY_DB_USERNAME }}" \
-              -e POSTGRES_DEPLOY_DB_PW="${{ secrets.DEPLOY_DB_PW }}" \
+              -e POSTGRES_DEPLOY_DB_PW="${{ secrets.DEPLOY_DB_PASSWORD }}" \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
           
