@@ -2,8 +2,12 @@ package com.nurigil.nurigil.global.security.oauth;
 
 import com.nurigil.nurigil.global.domain.entity.Member;
 import com.nurigil.nurigil.global.repository.MemberRepository;
+import com.nurigil.nurigil.global.security.Token.TokenProvider;
+import com.nurigil.nurigil.global.security.principal.PrincipalDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -17,6 +21,7 @@ import java.util.Map;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
+    private final TokenProvider tokenProvider;
 
     @Transactional
     @Override
@@ -43,8 +48,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private Member getOrSave(OAuth2UserInfo oAuth2UserInfo) {
+
+        // 로그인 및 회원가입
         Member member = memberRepository.findByEmail(oAuth2UserInfo.email())
                 .orElseGet(oAuth2UserInfo::toEntity);
+
+        // accessToken, refreshToken 생성
+        OAuth2User oAuth2User = new PrincipalDetails(member, oAuth2UserInfo.)
+        String accessToken = tokenProvider.generateAccessToken()
         return memberRepository.save(member);
     }
 }

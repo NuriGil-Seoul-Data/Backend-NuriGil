@@ -1,4 +1,4 @@
-package com.nurigil.nurigil.global.security.oauth;
+package com.nurigil.nurigil.global.security.principal;
 
 import com.nurigil.nurigil.global.domain.entity.Member;
 import org.springframework.security.core.GrantedAuthority;

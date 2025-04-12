@@ -38,7 +38,8 @@ spring:
             authorization-grant-type: authorization-code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope:
-              - profile_nickname
+              - nickname
+              - email
         provider:
           naver :
             authorization-uri: https://nid.naver.com/oauth2.0/authorize

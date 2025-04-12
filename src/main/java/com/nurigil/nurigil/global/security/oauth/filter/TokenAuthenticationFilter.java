@@ -1,5 +1,6 @@
-package com.nurigil.nurigil.global.security.oauth;
+package com.nurigil.nurigil.global.security.oauth.filter;
 
+import com.nurigil.nurigil.global.security.Token.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,8 +14,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
-import static org.springframework.security.config.web.server.SecurityWebFiltersOrder.AUTHORIZATION;
 
 @RequiredArgsConstructor
 @Component

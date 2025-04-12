@@ -1,8 +1,13 @@
 package com.nurigil.nurigil.global.config;
 
+
 import com.nurigil.nurigil.global.security.oauth.CustomOAuth2UserService;
-import com.nurigil.nurigil.global.security.oauth.OAuth2SuccessHandler;
-import com.nurigil.nurigil.global.security.oauth.TokenAuthenticationFilter;
+
+import com.nurigil.nurigil.global.security.oauth.filter.TokenAuthenticationFilter;
+import com.nurigil.nurigil.global.security.oauth.filter.TokenExceptionFilter;
+import com.nurigil.nurigil.global.security.oauth.handler.CustomAccessDeniedHandler;
+import com.nurigil.nurigil.global.security.oauth.handler.CustomAuthenticationEntryPoint;
+import com.nurigil.nurigil.global.security.oauth.handler.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -51,28 +57,30 @@ public class SecurityConfig {
                 )
                 //Request 설정
                 .authorizeHttpRequests(request ->
-                        request.re)
+                        request.requestMatchers(
+                                new AntPathRequestMatcher("/"),
+                                new AntPathRequestMatcher("/api/**")
+                        ).permitAll()
+                                .anyRequest().authenticated()
+        )
 
                 //oauth2 설정
                 .oauth2Login(oauth->
-                        oauth.userInfoEndpoint(c -> c.userService(oAuth2UserService)))
-                                .successhandler(oAuth2SuccessHandler)
-
+                        oauth.userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
+                                .successHandler(oAuth2SuccessHandler)
+                )
 
                 //jwt 설정
                 .addFilterBefore(tokenAuthenticationFilter, // 로그인 시도 전에 헤더를 통한 토큰 필터
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new TokenExceptionHandler(), tokenAuthenticationFilter.getClass)
+                .addFilterBefore(new TokenExceptionFilter(), tokenAuthenticationFilter.getClass())
 
                 // 인증 예외 핸들링
                 .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // 토큰이 없는 사람이 접근했을 예외
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())) // 인증은 되었지만 접근 권한이 없는 경우
 
                 .build();
-
-
-
 
     }
 

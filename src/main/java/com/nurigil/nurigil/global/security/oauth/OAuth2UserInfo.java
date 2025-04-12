@@ -1,5 +1,6 @@
 package com.nurigil.nurigil.global.security.oauth;
 
+import com.nurigil.nurigil.global.apiPayload.exception.auth.CustomAuthException;
 import com.nurigil.nurigil.global.domain.entity.Member;
 import com.nurigil.nurigil.global.domain.entity.type.Role;
 import jakarta.security.auth.message.AuthException;
@@ -7,6 +8,8 @@ import lombok.Builder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Map;
+
+import static com.nurigil.nurigil.global.apiPayload.code.status.ErrorStatus.ILLEGAL_REGISTRATION_ID;
 
 
 @Builder
@@ -20,7 +23,7 @@ public record OAuth2UserInfo(
         return switch (registrationId) { // registration id별로 userInfo 생성
             case "naver" -> ofNaver(attributes);
             case "kakao" -> ofKakao(attributes);
-            default -> throw new AuthException(ILLEGAL_REGISTRATION_ID);
+            default -> throw new CustomAuthException(ILLEGAL_REGISTRATION_ID);
         };
     }
 
