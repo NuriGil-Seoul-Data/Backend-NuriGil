@@ -22,8 +22,19 @@ public class TokenService {
     }
 
     //access token 갱신
-    public void updateToken(String newAccessToken, Token token) {
+    public void updateAccessToken(String newAccessToken, Token token) {
         token.updateAccessToken(newAccessToken);
         tokenRepository.save(token);
     }
+
+    // access token 과 refresh token 생성
+    public void save(String provideId, String refreshToken, String accessToken) {
+        Token token = Token.builder()
+                .providerId(provideId)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+        tokenRepository.save(token);
+    }
+
 }

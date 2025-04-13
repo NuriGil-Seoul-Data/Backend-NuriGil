@@ -42,6 +42,7 @@ public class TokenProvider {
 
     public void generateRefreshToken(Authentication authentication, String accessToken) {
         String refreshToken = generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME);
+        tokenService.save(authentication.getName(), refreshToken, accessToken);
     }
 
     private String generateToken(Authentication authentication, long expireTime) {
@@ -81,7 +82,7 @@ public class TokenProvider {
 
             if(validateToken(refreshToken)) {
                 String reissueAccessToken = generateAccessToken(getAuthentication(refreshToken));
-                tokenService.updateToken(reissueAccessToken, token);
+                tokenService.updateAccessToken(reissueAccessToken, token);
                 return reissueAccessToken;
             }
         }

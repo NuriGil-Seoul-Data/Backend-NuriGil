@@ -51,18 +51,15 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session
                         -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SECURITY_ALLOW_ARRAY).permitAll()
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/"),
+                                new AntPathRequestMatcher("/api/**"),
+                                new AntPathRequestMatcher("/oauth2/**")
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
-                //Request 설정
-                .authorizeHttpRequests(request ->
-                        request.requestMatchers(
-                                new AntPathRequestMatcher("/"),
-                                new AntPathRequestMatcher("/api/**")
-                        ).permitAll()
-                                .anyRequest().authenticated()
-        )
 
                 //oauth2 설정
                 .oauth2Login(oauth->

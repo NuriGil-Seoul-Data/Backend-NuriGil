@@ -38,7 +38,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
         // 유저 정보 DTO
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuth2UserAttributes);
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuth2UserAttributes, userNameAttributeName);
 
         // 멤버 회원 가입 및 로그인
         Member member = getOrSave(oAuth2UserInfo);
@@ -54,8 +54,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .orElseGet(oAuth2UserInfo::toEntity);
 
         // accessToken, refreshToken 생성
-        OAuth2User oAuth2User = new PrincipalDetails(member, oAuth2UserInfo.)
-        String accessToken = tokenProvider.generateAccessToken()
+        OAuth2User oAuth2User = new PrincipalDetails(member, oAuth2UserInfo.getAttributes(), oAuth2UserInfo.userNameAttributes());
+        Authentication authentication = new OAuth2AuthenticationToken(oAuth2User, oAuth2User.getAuthorities(), oAuth2User.getName());
+
+        String accessToken = tokenProvider.generateAccessToken(authentication);
+        tokenProvider.generateRefreshToken(authentication, accessToken); // refresh라는 것은 결국엔 로그인 아니면 회원가입 후 로그인이라는 뜻
+
         return memberRepository.save(member);
     }
 }

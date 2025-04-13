@@ -26,11 +26,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response, FilterChain filterChain) throws SecurityException, IOException, ServletException {
         String accessToken = resolveToken(request);
 
+        if (!StringUtils.hasText(accessToken)) {
+            filterChain.doFilter(request, response);
+            System.out.println("⚠️ 토큰 없음. 필터 통과.");
+            return;
+        }
+
         // validate the accessToken
         if(tokenProvider.validateToken(accessToken)) {
+            System.out.println("✅ 유효한 토큰. 인증 정보 설정.");
             setAuthentication(accessToken);
         } else {
             // If it's expired -> refresh the access token
+            System.out.println("⛔ 만료 혹은 잘못된 토큰.");
             String reissueAccessToken = tokenProvider.reissueAccessToken(accessToken);
 
             if(StringUtils.hasText(reissueAccessToken)) {

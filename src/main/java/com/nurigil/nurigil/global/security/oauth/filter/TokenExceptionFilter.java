@@ -1,5 +1,6 @@
 package com.nurigil.nurigil.global.security.oauth.filter;
 
+import com.nurigil.nurigil.global.apiPayload.exception.GeneralException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,8 +18,8 @@ public class TokenExceptionFilter extends OncePerRequestFilter {
 
         try{
             filterChain.doFilter(request, response);
-        } catch (TokenException e) {
-            response.sendError(e.getErrorCode().getHttpStatus().value(), e.getMessage());
+        } catch (GeneralException e) {
+            response.sendError(e.getErrorReason().getHttpStatus().value(), e.getMessage());
         }
     }
 }
