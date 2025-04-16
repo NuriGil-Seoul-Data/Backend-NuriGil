@@ -4,6 +4,7 @@ import com.nurigil.nurigil.global.domain.entity.Member;
 import com.nurigil.nurigil.global.repository.MemberRepository;
 import com.nurigil.nurigil.global.security.Token.TokenProvider;
 import com.nurigil.nurigil.global.security.principal.PrincipalDetails;
+import io.lettuce.core.ScriptOutputType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -37,29 +38,41 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
+        System.out.println(userNameAttributeName);
+
         // 유저 정보 DTO
-        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuth2UserAttributes, userNameAttributeName);
+        OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuth2UserAttributes);
 
         // 멤버 회원 가입 및 로그인
-        Member member = getOrSave(oAuth2UserInfo);
+        Member member = getOrSave(oAuth2UserInfo, registrationId, userNameAttributeName);
 
         // oAuth2User로 변환
-        return new PrincipalDetails(member, oAuth2UserAttributes, userNameAttributeName);
+        return new PrincipalDetails(member, oAuth2UserInfo.attributes(), userNameAttributeName);
     }
 
-    private Member getOrSave(OAuth2UserInfo oAuth2UserInfo) {
-
+    private Member getOrSave(OAuth2UserInfo oAuth2UserInfo, String registrationId, String userNameAttributeName) {
         // 로그인 및 회원가입
         Member member = memberRepository.findByEmail(oAuth2UserInfo.email())
-                .orElseGet(oAuth2UserInfo::toEntity);
+                .orElseGet(() -> {
+                    // 새로운 회원 만듦
+                    Member newMember = oAuth2UserInfo.toEntity();
+                    // 이제 토큰 만들어야할 차례
+                    saveToken(newMember, oAuth2UserInfo, registrationId, userNameAttributeName);
 
+                    return memberRepository.save(newMember);
+                        }
+                );
+
+        return memberRepository.save(member);
+    }
+
+    private void saveToken(Member member, OAuth2UserInfo oAuth2UserInfo, String registrationId, String userNameAttributeName) {
         // accessToken, refreshToken 생성
-        OAuth2User oAuth2User = new PrincipalDetails(member, oAuth2UserInfo.getAttributes(), oAuth2UserInfo.userNameAttributes());
-        Authentication authentication = new OAuth2AuthenticationToken(oAuth2User, oAuth2User.getAuthorities(), oAuth2User.getName());
+        OAuth2User oAuth2User = new PrincipalDetails(member, oAuth2UserInfo.attributes(), userNameAttributeName);
+        Authentication authentication = new OAuth2AuthenticationToken(oAuth2User, oAuth2User.getAuthorities(), registrationId);
 
         String accessToken = tokenProvider.generateAccessToken(authentication);
         tokenProvider.generateRefreshToken(authentication, accessToken); // refresh라는 것은 결국엔 로그인 아니면 회원가입 후 로그인이라는 뜻
 
-        return memberRepository.save(member);
     }
 }

@@ -28,9 +28,9 @@ public class TokenService {
     }
 
     // access token 과 refresh token 생성
-    public void save(String provideId, String refreshToken, String accessToken) {
+    public void save(String ProviderId ,String refreshToken, String accessToken) {
         Token token = Token.builder()
-                .providerId(provideId)
+                .provideId(ProviderId)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();

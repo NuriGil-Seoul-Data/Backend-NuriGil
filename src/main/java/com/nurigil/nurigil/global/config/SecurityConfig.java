@@ -56,7 +56,9 @@ public class SecurityConfig {
                         .requestMatchers(
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/api/**"),
-                                new AntPathRequestMatcher("/oauth2/**")
+                                new AntPathRequestMatcher("/oauth2/**"),
+                                new AntPathRequestMatcher("/login"),
+                                new AntPathRequestMatcher("/member/join", "/member/login") // 이메일 로그인 및 회원가입
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

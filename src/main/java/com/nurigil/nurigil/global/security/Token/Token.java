@@ -14,13 +14,12 @@ import org.springframework.data.redis.core.RedisHash;
 public class Token {
 
     @Id
-    private String providerId;
+    private String provideId;
 
-    private String refreshToken;
     private String accessToken;
+    private String refreshToken;
 
     // getter & setter
-
     public void updateAccessToken(String accessToken){
         this.accessToken = accessToken;
     }

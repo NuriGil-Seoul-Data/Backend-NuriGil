@@ -1,5 +1,6 @@
 package com.nurigil.nurigil.global.security.Token;
 
+import com.nurigil.nurigil.global.security.principal.PrincipalDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -10,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +19,7 @@ import javax.crypto.SecretKey;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -42,7 +45,9 @@ public class TokenProvider {
 
     public void generateRefreshToken(Authentication authentication, String accessToken) {
         String refreshToken = generateToken(authentication, REFRESH_TOKEN_EXPIRE_TIME);
-        tokenService.save(authentication.getName(), refreshToken, accessToken);
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+        tokenService.save(principalDetails.getName(), refreshToken, accessToken);
     }
 
     private String generateToken(Authentication authentication, long expireTime) {
@@ -53,8 +58,12 @@ public class TokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining());
 
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        System.out.println(principalDetails.getName());
+        System.out.println(principalDetails);
+
         return Jwts.builder()
-                .setSubject(authentication.getName())
+                .setSubject(principalDetails.getName())
                 .claim(KEY_ROLE, authorities)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
@@ -109,6 +118,4 @@ public class TokenProvider {
             return e.getClaims();
         } // 이후에 다른 예외는 Exception Class를 따로 만들어야 됨
     }
-
-
 }
