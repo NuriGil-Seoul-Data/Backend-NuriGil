@@ -2,7 +2,12 @@ package com.nurigil.nurigil.global.web.controller;
 
 import com.nurigil.nurigil.global.apiPayload.ApiResponse;
 import com.nurigil.nurigil.global.apiPayload.code.status.SuccessStatus;
+import com.nurigil.nurigil.global.service.MemberPreferenceService.MemberPreferenceService;
+import com.nurigil.nurigil.global.web.dto.MemberPreference.MemberPreferenceRequestDTO;
+import com.nurigil.nurigil.global.web.dto.MemberPreference.MemberPreferenceResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +23,19 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "멤버 선호 API", description = "멤버 선호 API입니다.")
 public class MemberPreferenceController {
 
+    private final MemberPreferenceService memberPreferenceService;
+
     // 선호 설정 등록 API
     @Operation(summary = "선호 설정 등록 API", description = "선호 설정 등록 API 입니다.")
-    @PostMapping(   "/{id}")
-    public ApiResponse<?> PostMemberPreference() {
-        return ApiResponse.onSuccess(SuccessStatus.MEMBER_PREFERENCE_POST_OK, null);
+    @Parameters({
+            @Parameter(name = "member_id", description = "멤버 ID, 차후 hidden으로 수정 예정", required = true)
+    })
+    @PostMapping(   "/{member_id}")
+    public ApiResponse<MemberPreferenceResponseDTO.MemberPreferenceResponse> CreateMemberPreference(
+            @PathVariable("member_id") Long memberId,
+            @RequestBody MemberPreferenceRequestDTO.MemberPreferenceRequest request) {
+        MemberPreferenceResponseDTO.MemberPreferenceResponse response = memberPreferenceService.createMemberPreference(memberId, request);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_PREFERENCE_POST_OK, response);
     }
 
     // 선호 설정 조회 API
