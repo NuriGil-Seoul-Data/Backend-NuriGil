@@ -34,29 +34,25 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_REQUEST_INFO(HttpStatus.UNAUTHORIZED, "AUTH_007", "카카오 정보 불러오기에 실패하였습니다."),
     AUTH_INVALID_CODE(HttpStatus.UNAUTHORIZED, "AUTH_008", "코드가 유효하지 않습니다."),
 
-    // User 관련
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_001", "존재하지 않는 사용자입니다."),
-    USER_EXISTS(HttpStatus.BAD_REQUEST, "USER_002", "이미 존재하는 아이디입니다."),
-    USER_DELETE_FAILED(HttpStatus.NOT_FOUND, "USER_003", "회원 탈퇴에 실패했습니다."),
+    // Member 관련
+    MEMBER_ID_NULL(HttpStatus.BAD_REQUEST, "MEMBER_4001", "사용자 아이디는 필수 입니다."),
+    MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "MEMBER_4002", "사용자가 없습니다."),
+    MEMBER_NAME_NOT_EXIST(HttpStatus.BAD_REQUEST, "MEMBER_4003", "이름입력은 필수 입니다."),
+    MEMBER_ALREADY_EXISTS(HttpStatus.CONFLICT, "MEMBER_4091", "이미 존재하는 유저입니다."),
+    MEMBER_ADMIN_UNAUTHORIZED(HttpStatus.BAD_REQUEST, "MEMBER_4004", "관리자 권한이 없습니다."),
+    MEMBER_LOGIN_FAIL(HttpStatus.BAD_REQUEST, "MEMBER_4005", "아이디나 비밀번호가 올바르지 않습니다."),
+    MEMBER_WRONG_EMAIL(HttpStatus.BAD_REQUEST, "MEMBER_4006", "이메일 형식이 올바르지 않습니다."),
+    MEMBER_WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "MEMBER_4007", "비밀번호 형식이 올바르지 않습니다."),
+    MEMBER_EMAIL_ALREADY_EXISTS(HttpStatus.CONFLICT, "MEMBER_4092", "이미 가입된 이메일입니다."),
+    MEMBER_NICKNAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "MEMBER_4093", "이미 존재하는 닉네임입니다."),
+
+    // MemberPreference 관련
+    MEMBER_PREFERENCE_ALREADY_EXISTS(HttpStatus.CONFLICT, "MEMBERPREFERENCE_4091", "이미 선호 설정이 존재합니다."),
 
     //Search 관련
     SEARCH_CONDITION_INVALID(HttpStatus.BAD_REQUEST, "SEARCH_001", "검색 조건이 하나라도 존재해야 합니다."),
     RECREATION_NOT_FOUND(HttpStatus.NOT_FOUND, "SEARCH_001", "검색 결과가 존재하지 않습니다."),
 
-    //Place 관련
-    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_001", "필터에 해당하는 카테고리가 없습니다. 실내/야외 중 선택해주세요."),
-    MOOD_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_002", "필터에 해당하는 분위기가 없습니다. 편안한/신나는/차분한/즐거운/아늑한/재미있는 중에 선택해주세요."),
-    SIZE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_003", "필터에 해당하는 공간크기가 없습니다. 부족/보통/넉넉 중에 선택해주세요."),
-    OUTLET_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_004", "필터에 해당하는 콘센트가 없습니다. 부족/보통/넉넉 중에 선택해주세요."),
-    NOISE_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_005", "필터에 해당하는 소음이 없습니다. 조용함/보통/생기있음 중에 선택해주세요."),
-    INVALID_DAY(HttpStatus.BAD_REQUEST, "PLACE_006", "잘못된 요일 입니다."),
-    WIFI_NOT_FOUND(HttpStatus.NOT_FOUND, "PLACE_007", "필터에 해당하는 와이파이가 없습니다. 있어요/없어요 중에 선택해주세요."),
-    INVALID_TIME_FILTER(HttpStatus.BAD_REQUEST, "PLACE_008", "운영 시간 필터가 잘못되었습니다. 필터를 적용할 시간과 요일을 함께 보내주세요"),
-    BOOKMARK_FAILED(HttpStatus.BAD_REQUEST, "PLACE_009", "해당 공간 북마크 등록에 실패하였습니다."),
-    UNBOOKMARK_FAILED(HttpStatus.BAD_REQUEST, "PLACE_010", "해당 공간 북마크 해제에 실패하였습니다."),
-    USERPLACE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLACE_011", "해당 유저의 저장 공간이 존재하지 않습니다."),
-    PLACE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLACE_012", "해당 공간이 존재하지 않습니다."),
-    PLACE_CLOSED(HttpStatus.BAD_REQUEST, "PLACE_013", "해당 공간은 오늘 휴무일입니다."),
 
     ;
 
