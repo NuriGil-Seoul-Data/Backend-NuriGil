@@ -32,4 +32,9 @@ public class MemberPreference extends BaseEntity {
     @Column(nullable = false)
     private Slope slope;
 
+    public void updateMemberPreference(Difficulty difficulty, Slope slope) {
+        this.difficulty = difficulty;
+        this.slope = slope;
+    }
+
 }

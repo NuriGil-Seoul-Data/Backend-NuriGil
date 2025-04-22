@@ -13,6 +13,7 @@ import com.nurigil.nurigil.global.web.dto.MemberPreference.MemberPreferenceRespo
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class MemberPreferenceServiceImpl implements MemberPreferenceService{
 
     // 선호 설정 등록 API
     @Override
+    @Transactional
     public MemberPreferenceResponseDTO.Response createMemberPreference(Long memberId, MemberPreferenceRequestDTO.Request request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
@@ -55,7 +57,26 @@ public class MemberPreferenceServiceImpl implements MemberPreferenceService{
         return MemberPreferenceConverter.toCreateResultDTO(memberPreference);
     }
 
+    // 선호 설정 수정 API
+    @Override
+    @Transactional
+    public MemberPreferenceResponseDTO.Response PatchMemberPreference(Long memberId, MemberPreferenceRequestDTO.Request request) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
 
+        Optional<MemberPreference> optionalMemberPreference = memberPreferenceRepository.findByMember(member);
 
-
+        // 선호 설정이 없으면 request로 들어온 요청을 선호 설정으로 등록
+        if (optionalMemberPreference.isEmpty()) {
+            MemberPreference newMemberPreference = MemberPreferenceConverter.toMemberPreference(request);
+            newMemberPreference.setMember(member);
+            memberPreferenceRepository.save(newMemberPreference);
+            return MemberPreferenceConverter.toCreateResultDTO(newMemberPreference);
+        } else { // 선호 설정이 있는 경우 update
+            MemberPreference existMemberPreference = optionalMemberPreference.get();
+            existMemberPreference.updateMemberPreference(request.getDifficulty(), request.getSlope());
+            memberPreferenceRepository.save(existMemberPreference);
+            return MemberPreferenceConverter.toCreateResultDTO(existMemberPreference);
+        }
+    }
 }
