@@ -13,6 +13,7 @@ import com.nurigil.nurigil.global.web.dto.MemberPreference.MemberPreferenceRespo
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,6 +26,7 @@ public class MemberPreferenceServiceImpl implements MemberPreferenceService{
 
     // 선호 설정 등록 API
     @Override
+    @Transactional
     public MemberPreferenceResponseDTO.Response createMemberPreference(Long memberId, MemberPreferenceRequestDTO.Request request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
@@ -57,6 +59,7 @@ public class MemberPreferenceServiceImpl implements MemberPreferenceService{
 
     // 선호 설정 수정 API
     @Override
+    @Transactional
     public MemberPreferenceResponseDTO.Response PatchMemberPreference(Long memberId, MemberPreferenceRequestDTO.Request request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
