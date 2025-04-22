@@ -34,11 +34,14 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_REQUEST_INFO(HttpStatus.UNAUTHORIZED, "AUTH_007", "카카오 정보 불러오기에 실패하였습니다."),
     AUTH_INVALID_CODE(HttpStatus.UNAUTHORIZED, "AUTH_008", "코드가 유효하지 않습니다."),
     ILLEGAL_REGISTRATION_ID(HttpStatus.BAD_REQUEST, "AUTH_009", "허용되지 않은 소셜 로그인 경로입니다."),
+    INVALID_LOGIN_EMAIL(HttpStatus.UNAUTHORIZED, "AUTH_010", "존재하지 않는 이메일입니다."),
+
 
     // User 관련
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER_001", "존재하지 않는 사용자입니다."),
     USER_EXISTS(HttpStatus.BAD_REQUEST, "USER_002", "이미 존재하는 아이디입니다."),
-    USER_DELETE_FAILED(HttpStatus.NOT_FOUND, "USER_003", "회원 탈퇴에 실패했습니다."),
+    EMAIL_EXISTS(HttpStatus.BAD_REQUEST, "USER_003", "이미 존재하는 이메일입니다.."),
+    USER_DELETE_FAILED(HttpStatus.NOT_FOUND, "USER_004", "회원 탈퇴에 실패했습니다."),
 
     //Search 관련
     SEARCH_CONDITION_INVALID(HttpStatus.BAD_REQUEST, "SEARCH_001", "검색 조건이 하나라도 존재해야 합니다."),
