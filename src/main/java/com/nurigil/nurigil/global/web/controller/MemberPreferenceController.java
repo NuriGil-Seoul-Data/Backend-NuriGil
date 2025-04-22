@@ -28,19 +28,22 @@ public class MemberPreferenceController {
     // 선호 설정 등록 API
     @Operation(summary = "선호 설정 등록 API", description = "선호 설정 등록 API 입니다.")
     @Parameters({
-            @Parameter(name = "member_id", description = "멤버 ID, 차후 hidden으로 수정 예정", required = true)
+            @Parameter(name = "memberId", description = "멤버 ID, 차후 hidden으로 수정 예정", required = false)
     })
-    @PostMapping(   "/{member_id}")
-    public ApiResponse<MemberPreferenceResponseDTO.MemberPreferenceResponse> CreateMemberPreference(
-            @PathVariable("member_id") Long memberId,
-            @RequestBody MemberPreferenceRequestDTO.MemberPreferenceRequest request) {
-        MemberPreferenceResponseDTO.MemberPreferenceResponse response = memberPreferenceService.createMemberPreference(memberId, request);
+    @PostMapping("/{memberId}")
+    public ApiResponse<MemberPreferenceResponseDTO.Response> CreateMemberPreference(
+            @PathVariable("memberId") Long memberId,
+            @RequestBody MemberPreferenceRequestDTO.Request request) {
+        MemberPreferenceResponseDTO.Response response = memberPreferenceService.createMemberPreference(memberId, request);
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_PREFERENCE_POST_OK, response);
     }
 
     // 선호 설정 조회 API
     @Operation(summary = "선호 설정 조회 API", description = "선호 설정 조회 API 입니다.")
-    @GetMapping(   "/{id}")
+    @Parameters({
+            @Parameter(name = "memberId", description = "멤버 ID, 차후 hidden으로 수정 예정", required = false)
+    })
+    @GetMapping("/{memberId}")
     public ApiResponse<?> GetMemberPreference() {
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_PREFERENCE_GET_OK, null);
     }

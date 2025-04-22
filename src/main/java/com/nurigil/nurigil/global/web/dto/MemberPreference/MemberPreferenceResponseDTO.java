@@ -10,7 +10,7 @@ public class MemberPreferenceResponseDTO {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class MemberPreferenceResponse {
+    public static class Response {
         private Difficulty difficulty;
         private Slope slope;
     }

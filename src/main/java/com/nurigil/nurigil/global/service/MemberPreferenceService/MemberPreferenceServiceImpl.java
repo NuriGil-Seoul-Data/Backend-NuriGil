@@ -3,6 +3,7 @@ package com.nurigil.nurigil.global.service.MemberPreferenceService;
 import com.nurigil.nurigil.global.apiPayload.code.status.ErrorStatus;
 import com.nurigil.nurigil.global.apiPayload.exception.handler.MemberHandler;
 import com.nurigil.nurigil.global.apiPayload.exception.handler.MemberPrefenceHandler;
+import com.nurigil.nurigil.global.converter.MemberPreferenceConverter;
 import com.nurigil.nurigil.global.domain.entity.Member;
 import com.nurigil.nurigil.global.domain.entity.MemberPreference;
 import com.nurigil.nurigil.global.repository.MemberPreferenceRepository;
@@ -22,7 +23,7 @@ public class MemberPreferenceServiceImpl implements MemberPreferenceService{
 
     // 선호 설정 등록 API
     @Override
-    public MemberPreferenceResponseDTO.MemberPreferenceResponse createMemberPreference(Long memberId, MemberPreferenceRequestDTO.MemberPreferenceRequest request) {
+    public MemberPreferenceResponseDTO.Response createMemberPreference(Long memberId, MemberPreferenceRequestDTO.Request request) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
 
@@ -31,17 +32,14 @@ public class MemberPreferenceServiceImpl implements MemberPreferenceService{
             throw new MemberPrefenceHandler(ErrorStatus.MEMBER_PREFERENCE_ALREADY_EXISTS);
         }
 
-        MemberPreference memberPreference = MemberPreference.builder()
-                .member(member)
-                .difficulty(request.getDifficulty())
-                .slope(request.getSlope())
-                .build();
+        MemberPreference newMemberPreference = MemberPreferenceConverter.toMemberPreference(request);
+        newMemberPreference.setMember(member);
 
-        memberPreferenceRepository.save(memberPreference);
+        memberPreferenceRepository.save(newMemberPreference);
 
-        return MemberPreferenceResponseDTO.MemberPreferenceResponse.builder()
-                .difficulty(memberPreference.getDifficulty())
-                .slope(memberPreference.getSlope())
-                .build();
+        return MemberPreferenceConverter.toCreateResultDTO(newMemberPreference);
     }
+
+    // 선호 설정 조회 API
+
 }
