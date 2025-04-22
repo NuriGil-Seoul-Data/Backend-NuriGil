@@ -53,9 +53,16 @@ public class MemberPreferenceController {
 
     // 선호 설정 수정 API
     @Operation(summary = "선호 설정 수정 API", description = "선호 설정 수정 API 입니다.")
-    @PatchMapping(   "/{id}")
-    public ApiResponse<?> PatchMemberPreference() {
-        return ApiResponse.onSuccess(SuccessStatus.MEMBER_PREFERENCE_PATCH_OK, null);
+    @Parameters({
+            @Parameter(name = "memberId", description = "멤버 ID, 차후 hidden으로 수정 예정", required = false)
+    })
+    @PatchMapping("/{memberId}")
+    public ApiResponse<MemberPreferenceResponseDTO.Response> PatchMemberPreference(
+            @PathVariable("memberId") Long memberId,
+            @RequestBody MemberPreferenceRequestDTO.Request request
+    ) {
+        MemberPreferenceResponseDTO.Response response = memberPreferenceService.PatchMemberPreference(memberId, request);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_PREFERENCE_PATCH_OK, response);
     }
 
 }
