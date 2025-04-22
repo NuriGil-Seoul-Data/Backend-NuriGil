@@ -10,7 +10,7 @@ public class MemberPreferenceRequestDTO {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class MemberPreferenceRequest {
+    public static class Request {
         private Difficulty difficulty;
         private Slope slope;
     }
