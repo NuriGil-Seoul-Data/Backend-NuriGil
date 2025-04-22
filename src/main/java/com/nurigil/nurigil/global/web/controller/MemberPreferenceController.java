@@ -44,8 +44,11 @@ public class MemberPreferenceController {
             @Parameter(name = "memberId", description = "멤버 ID, 차후 hidden으로 수정 예정", required = false)
     })
     @GetMapping("/{memberId}")
-    public ApiResponse<?> GetMemberPreference() {
-        return ApiResponse.onSuccess(SuccessStatus.MEMBER_PREFERENCE_GET_OK, null);
+    public ApiResponse<MemberPreferenceResponseDTO.Response> GetMemberPreference(
+            @PathVariable("memberId") Long memberId
+    ) {
+        MemberPreferenceResponseDTO.Response response = memberPreferenceService.getMemberPreference(memberId);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_PREFERENCE_GET_OK, response);
     }
 
     // 선호 설정 수정 API

@@ -48,6 +48,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // MemberPreference 관련
     MEMBER_PREFERENCE_ALREADY_EXISTS(HttpStatus.CONFLICT, "MEMBERPREFERENCE_4091", "이미 선호 설정이 존재합니다."),
+    MEMBER_PREFERENCE_NULL(HttpStatus.NOT_FOUND, "MEMBERPREFERENCE_4041", "선호 설정이 존재하지 않습니다."),
 
     //Search 관련
     SEARCH_CONDITION_INVALID(HttpStatus.BAD_REQUEST, "SEARCH_001", "검색 조건이 하나라도 존재해야 합니다."),

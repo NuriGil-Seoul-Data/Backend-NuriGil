@@ -5,4 +5,5 @@ import com.nurigil.nurigil.global.web.dto.MemberPreference.MemberPreferenceRespo
 
 public interface MemberPreferenceService {
     MemberPreferenceResponseDTO.Response createMemberPreference(Long memberId, MemberPreferenceRequestDTO.Request request);
+    MemberPreferenceResponseDTO.Response getMemberPreference(Long memberId);
 }

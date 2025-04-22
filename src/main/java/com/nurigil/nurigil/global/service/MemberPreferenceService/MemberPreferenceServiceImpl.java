@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class MemberPreferenceServiceImpl implements MemberPreferenceService{
@@ -41,5 +43,19 @@ public class MemberPreferenceServiceImpl implements MemberPreferenceService{
     }
 
     // 선호 설정 조회 API
+    @Override
+    public MemberPreferenceResponseDTO.Response getMemberPreference(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberHandler(ErrorStatus.MEMBER_ID_NULL));
+
+        MemberPreference memberPreference = memberPreferenceRepository
+                .findByMember(member)
+                .orElseThrow(() -> new MemberPrefenceHandler(ErrorStatus.MEMBER_PREFERENCE_NULL));
+
+        return MemberPreferenceConverter.toCreateResultDTO(memberPreference);
+    }
+
+
+
 
 }
