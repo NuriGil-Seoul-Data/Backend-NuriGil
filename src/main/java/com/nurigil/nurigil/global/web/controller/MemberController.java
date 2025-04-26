@@ -17,12 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "멤버 API", description = "멤버 API입니다.")
 public class MemberController {
 
-    // 예시 로그인 API
-    @Operation(summary = "예시 로그인 API", description = "예시 로그인 API")
-    @PostMapping("/login")
-    public String Login() {
-        return "success";
-    }
+    // 이메일 로그인
 
 
 
