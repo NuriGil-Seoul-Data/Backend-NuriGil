@@ -1,13 +1,14 @@
 package com.nurigil.nurigil.global.domain.entity;
 
 import com.nurigil.nurigil.global.domain.common.BaseEntity;
-import com.nurigil.nurigil.global.domain.entity.type.Gender;
-import com.nurigil.nurigil.global.domain.entity.type.PrefersWalk;
-import com.nurigil.nurigil.global.domain.entity.type.Role;
+import com.nurigil.nurigil.global.domain.enums.Gender;
+import com.nurigil.nurigil.global.domain.enums.PreferenceWalk;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,42 +16,41 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class Member extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id", nullable = false, columnDefinition = "bigint")
     private Long memberId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "email", nullable = false)
+    @Column(length = 45, unique = true)
     private String email;
 
-    @Column(name = "password")
     private String password;
 
+    private int age;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
     private Gender gender;
 
-    @Column(name = "uses_wheel")
-    private boolean usesWheel;
+    private Boolean usesWheel;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    @Column(name = "prefers_walk")
-    private PrefersWalk prefersWalk;
+    @Column(nullable = false)
+    private PreferenceWalk preferenceWalk =  PreferenceWalk.WALK;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role")
-    private Role role;
+    @OneToMany(mappedBy = "member")
+    private List<MemberCourse> memberCourses = new ArrayList<>();
 
-    private String accessToken;
-    private String refreshToken;
+    @OneToMany(mappedBy = "member")
+    private List<WalkCalendar> walkCalendars = new ArrayList<>();
 
-    public void updateToken(String accessToken, String refreshToken) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-    }
+    @OneToMany(mappedBy = "member")
+    private List<PathReport> pathReports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<EmergencyCall> emergencyCalls = new ArrayList<>();
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private MemberPreference memberPreference;
 }
