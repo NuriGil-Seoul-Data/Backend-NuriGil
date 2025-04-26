@@ -22,7 +22,7 @@ public class AuthResponseDTO {
     public static class EmailLoginResponse{
         String accessToken;
         String refreshToken;
-        String memberId;
+        String email;
     }
 
     @Getter
@@ -32,5 +32,14 @@ public class AuthResponseDTO {
     public static class TokenRefreshResponse {
         String accessToken;
         String refreshToken;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class DeleteMemberResponse {
+        Long memberId;
+        String memberEmail;
     }
 }

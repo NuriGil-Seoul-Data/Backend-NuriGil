@@ -1,6 +1,7 @@
 package com.nurigil.nurigil.global.domain.entity;
 
 import com.nurigil.nurigil.global.domain.common.BaseEntity;
+import com.nurigil.nurigil.global.domain.entity.type.Role;
 import com.nurigil.nurigil.global.domain.enums.Gender;
 import com.nurigil.nurigil.global.domain.enums.PreferenceWalk;
 import jakarta.persistence.*;
@@ -25,6 +26,9 @@ public class Member extends BaseEntity {
     @Column(length = 45, unique = true)
     private String email;
 
+    @Column(name = "name")
+    private String name;
+
     private String password;
 
     private int age;
@@ -33,6 +37,10 @@ public class Member extends BaseEntity {
     private Gender gender;
 
     private Boolean usesWheel;
+
+    private String refreshToken;
+
+    private Role role;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
@@ -53,4 +61,9 @@ public class Member extends BaseEntity {
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private MemberPreference memberPreference;
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
 }

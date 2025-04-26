@@ -17,7 +17,8 @@
 
         @Override
         public String getName() {
-            return attributes.get(attributeKey).toString();
+            Object value = attributes.get(attributeKey);
+            return (value != null) ? value.toString() : member.getEmail();
         }
 
         @Override

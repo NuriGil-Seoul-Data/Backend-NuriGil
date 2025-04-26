@@ -7,6 +7,7 @@ import com.nurigil.nurigil.global.security.oauth.filter.TokenAuthenticationFilte
 import com.nurigil.nurigil.global.security.oauth.filter.TokenExceptionFilter;
 import com.nurigil.nurigil.global.security.oauth.handler.CustomAccessDeniedHandler;
 import com.nurigil.nurigil.global.security.oauth.handler.CustomAuthenticationEntryPoint;
+import com.nurigil.nurigil.global.security.oauth.handler.CustomLogoutHandler;
 import com.nurigil.nurigil.global.security.oauth.handler.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final CustomLogoutHandler logoutHandler;
 
 
     private static final String[] SECURITY_ALLOW_ARRAY = {
@@ -56,11 +58,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(SECURITY_ALLOW_ARRAY).permitAll()
                         .requestMatchers(
-                                new AntPathRequestMatcher("/"),
+                                // 로그인 관련 접근
                                 new AntPathRequestMatcher("/api/**"),
                                 new AntPathRequestMatcher("/oauth2/**"),
-                                new AntPathRequestMatcher("/login"),
-                                new AntPathRequestMatcher("/member/join", "/member/login") // 이메일 로그인 및 회원가입
+                                new AntPathRequestMatcher("/auth/token"),
+                                new AntPathRequestMatcher("/members/**") // 이메일 로그인 및 회원가입
+
+                                //
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -81,6 +85,15 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // 토큰이 없는 사람이 접근했을 예외
                         .accessDeniedHandler(new CustomAccessDeniedHandler())) // 인증은 되었지만 접근 권한이 없는 경우
 
+                // 로그아웃
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .addLogoutHandler(logoutHandler)
+                        .invalidateHttpSession(true) //세션 무효화
+                        .clearAuthentication(true) // SecurityContext 비우기
+                        .deleteCookies("JSESSIONID") // 세션 쿠키 삭제
+                )
                 .build();
 
     }

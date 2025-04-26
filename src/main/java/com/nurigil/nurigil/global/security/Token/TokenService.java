@@ -37,4 +37,9 @@ public class TokenService {
         tokenRepository.save(token);
     }
 
+    // token 삭제
+    public void deleteTokenByAccessToken(String accessToken) {
+        Token token = findByAccessTokenOrThrow(accessToken);
+        tokenRepository.delete(token);
+    }
 }

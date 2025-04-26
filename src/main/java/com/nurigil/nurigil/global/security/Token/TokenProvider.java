@@ -120,4 +120,6 @@ public class TokenProvider {
             return e.getClaims();
         } // 이후에 다른 예외는 Exception Class를 따로 만들어야 됨
     }
+
+    public void deleteToken(String token) {}
 }
