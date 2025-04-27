@@ -5,6 +5,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class TokenProvider {
 
     @Value("${jwt.key}")
@@ -61,8 +63,7 @@ public class TokenProvider {
                 .collect(Collectors.joining());
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println(principalDetails.getName());
-        System.out.println(principalDetails);
+        log.info("토큰 생성 완료(ProviderId) : {}", principalDetails.getName());
 
         return Jwts.builder()
                 .setSubject(principalDetails.getName())

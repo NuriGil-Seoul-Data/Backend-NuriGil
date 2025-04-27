@@ -1,6 +1,7 @@
 package com.nurigil.nurigil.global.security.oauth.handler;
 
 import com.nurigil.nurigil.global.repository.TokenRepository;
+import com.nurigil.nurigil.global.security.Token.TokenService;
 import com.nurigil.nurigil.global.security.principal.PrincipalDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomLogoutHandler implements LogoutHandler {
 
-    private final TokenRepository tokenRepository;
+    private final TokenService tokenService;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -26,6 +27,6 @@ public class CustomLogoutHandler implements LogoutHandler {
         String providerId = principalDetails.getName();
 
         // 2. Redis에 지정된 RefreshToken 삭제
-        tokenRepository.deleteByProviderId(providerId);
+        tokenService.deleteByProviderId(providerId);
     }
 }

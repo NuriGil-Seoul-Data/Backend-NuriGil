@@ -68,4 +68,9 @@ public class TokenService {
             }
         }
     }
+
+    // delete token by ProviderId
+    public void deleteByProviderId(String providerId) {
+        tokenRepository.deleteByProviderId(providerId);
+    }
 }
