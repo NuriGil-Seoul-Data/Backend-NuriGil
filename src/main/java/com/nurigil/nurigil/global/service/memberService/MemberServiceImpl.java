@@ -65,18 +65,22 @@ public class MemberServiceImpl implements MemberService {
         // 토큰 생성
         String accessToken = tokenProvider.generateAccessToken(authentication); // accessToken은 클라이언트가 들고다님
         String refreshToken = tokenProvider.generateRefreshToken(authentication, (String) accessToken); // 이건 백이 가지고 있어야 함.
+
         member.updateRefreshToken(refreshToken);
+        memberRepository.save(member);
 
         return AuthResponseDTO.EmailLoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .email(member.getEmail())
+                .memberId(member.getEmail())
                 .build();
     }
 
+    // 회원 탈퇴
     @Override
-    public AuthResponseDTO.DeleteMemberResponse deleteMember(String email) {
-        Member member = memberRepository.findByEmail(email)
+    @Transactional
+    public AuthResponseDTO.DeleteMemberResponse deleteMember(Long id) {
+        Member member = memberRepository.findById(id)
                         .orElseThrow(() -> new CustomAuthException(ErrorStatus.INVALID_LOGIN_EMAIL));
         memberRepository.delete(member);
 
@@ -84,6 +88,53 @@ public class MemberServiceImpl implements MemberService {
                 .memberId(member.getMemberId())
                 .memberEmail(member.getEmail())
                 .build();
+    }
+
+    // 사용자 정보 조회
+    @Override
+    public AuthResponseDTO.GetMemberResponse getMamberInfo(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new CustomAuthException(ErrorStatus.ILLEGAL_REGISTRATION_ID));
+
+        return AuthResponseDTO.GetMemberResponse.builder()
+                .memberId(member.getMemberId())
+                .memberEmail(member.getEmail())
+                .memberName(member.getName())
+                .memberUserWheel(member.getUsesWheel())
+                .build();
+    }
+
+        @Override
+        @Transactional
+        public AuthResponseDTO.UpdateMemberResponse updateMemberInfo(Long id, AuthRequestDTO.UpdateMemberRequest request) {
+            Member member = memberRepository.findById(id)
+                    .orElseThrow(() -> new CustomAuthException(ErrorStatus.ILLEGAL_REGISTRATION_ID));
+
+            // 사용자 정보 수정 완료
+            member.setEmail(request.getEmail());
+            member.setName(request.getName());
+            member.setUsesWheel(request.getUsesWheel());
+            memberRepository.save(member);
+
+            return AuthResponseDTO.UpdateMemberResponse.builder()
+                    .memberId(member.getMemberId())
+                    .memberName(member.getName())
+                    .memberEmail(member.getEmail())
+                    .memberUserWheel(member.getUsesWheel())
+                    .build();
+        }
+
+    @Override
+    public Member findMemberByEmail(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomAuthException(ErrorStatus.INVALID_LOGIN_EMAIL));
+
+        return member;
+    }
+
+    @Override
+    public void saveMember(Member member) {
+        memberRepository.save(member);
     }
 
 }

@@ -36,4 +36,20 @@ public class AuthRequestDTO {
         @NotBlank(message = "비밀번호를 입력해주세요.")
         private String password;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UpdateMemberRequest {
+
+        @NotBlank(message = "이메일을 입력해주세요.")
+        @Email(message = "올바른 이메일 형식을 입력해주세요.")
+        private String email;
+
+        @NotBlank(message = "이름을 입력해주세요.")
+        private String name;
+
+        private Boolean usesWheel;
+    }
 }

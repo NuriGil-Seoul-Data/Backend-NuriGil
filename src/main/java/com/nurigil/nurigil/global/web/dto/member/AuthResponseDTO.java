@@ -22,7 +22,7 @@ public class AuthResponseDTO {
     public static class EmailLoginResponse{
         String accessToken;
         String refreshToken;
-        String email;
+        String memberId;
     }
 
     @Getter
@@ -41,5 +41,27 @@ public class AuthResponseDTO {
     public static class DeleteMemberResponse {
         Long memberId;
         String memberEmail;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class GetMemberResponse {
+        Long memberId;
+        String memberEmail;
+        String memberName;
+        Boolean memberUserWheel;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UpdateMemberResponse {
+        Long memberId;
+        String memberEmail;
+        String memberName;
+        Boolean memberUserWheel;
     }
 }

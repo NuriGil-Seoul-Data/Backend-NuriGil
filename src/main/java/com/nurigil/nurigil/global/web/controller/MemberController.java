@@ -43,15 +43,36 @@ public class MemberController {
     @PostMapping("/login/email")
     public ApiResponse<AuthResponseDTO.EmailLoginResponse> emailLogin(@RequestBody @Valid AuthRequestDTO.EmailLoginRequest request) {
         AuthResponseDTO.EmailLoginResponse response = memberService.emailLogin(request);
-        return ApiResponse.onSuccess(SuccessStatus.MEMBER_SIGNUP_OK, response);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_LOGIN_OK, response);
     }
 
     // 회원 탈퇴 API
+    // 테스트 해봐야 함
     @Operation(summary = "회원 탈퇴 API", description = "회원 탈퇴 API입니다.")
-    @DeleteMapping("delete/member")
-    public ApiResponse<AuthResponseDTO.DeleteMemberResponse> DeleteMember(String email, String accessToken) {
-        AuthResponseDTO.DeleteMemberResponse response = memberService.deleteMember(email);
-        tokenService.deleteTokenByAccessToken(accessToken);
+    @DeleteMapping("/{id}")
+    public ApiResponse<AuthResponseDTO.DeleteMemberResponse> DeleteMember(@PathVariable Long id) {
+        tokenService.deleteByRefreshToken(id);
+        AuthResponseDTO.DeleteMemberResponse response = memberService.deleteMember(id);
         return ApiResponse.onSuccess(SuccessStatus.MEMBER_DELETE_OK, response);
     }
+
+    // 사용자 정보 조회 API
+    // 테스트 해봐야함
+    @Operation(summary = "사용자 정보 조회 API", description = "사용자 정보 조회 API 입니다.")
+    @GetMapping("/{id}")
+    public ApiResponse<AuthResponseDTO.GetMemberResponse> GetMemberInfo(@PathVariable Long id){
+        AuthResponseDTO.GetMemberResponse response = memberService.getMamberInfo(id);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_INFO_GET_OK, response);
+    }
+
+    // 사용자 정보 수정 API
+    // 테스트 해봐야함
+    @Operation(summary = "사용자 정보 수정 API", description = "사용자 정보 수정 API 입니다.")
+    @PatchMapping("/{id}")
+    public ApiResponse<AuthResponseDTO.UpdateMemberResponse> UpdateMemberInfo(@PathVariable Long id,
+                                                                              @RequestBody @Valid AuthRequestDTO.UpdateMemberRequest request) {
+        AuthResponseDTO.UpdateMemberResponse response = memberService.updateMemberInfo(id, request);
+        return ApiResponse.onSuccess(SuccessStatus.MEMBER_INFO_PATCH_OK, response);
+    }
+
 }

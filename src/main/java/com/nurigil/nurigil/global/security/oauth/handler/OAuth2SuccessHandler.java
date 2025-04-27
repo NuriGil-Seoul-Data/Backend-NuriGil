@@ -1,9 +1,15 @@
 package com.nurigil.nurigil.global.security.oauth.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nurigil.nurigil.global.apiPayload.code.status.ErrorStatus;
 import com.nurigil.nurigil.global.apiPayload.code.status.SuccessStatus;
+import com.nurigil.nurigil.global.apiPayload.exception.auth.CustomAuthException;
+import com.nurigil.nurigil.global.domain.entity.Member;
+import com.nurigil.nurigil.global.repository.MemberRepository;
 import com.nurigil.nurigil.global.security.Token.TokenProvider;
+import com.nurigil.nurigil.global.security.Token.TokenService;
 import com.nurigil.nurigil.global.security.principal.PrincipalDetails;
+import com.nurigil.nurigil.global.service.memberService.MemberService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,18 +30,22 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     private final TokenProvider tokenProvider;
     private static final String URI = "/auth/token ";
     private final ObjectMapper objectMapper;
+    private final TokenService tokenService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
+
         // accessToken, refreshToken 발급
         String accessToken = tokenProvider.generateAccessToken(authentication);
-        tokenProvider.generateRefreshToken(authentication, accessToken);
-
+        String refreshToken = tokenProvider.generateRefreshToken(authentication, accessToken);
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         String email = principalDetails.member().getEmail();
+
+        // token redis에 저장
+        tokenService.save(authentication.getName(), accessToken, refreshToken);
 
         // 응답 데이터 생성
         Map<String, Object> tokenResponse = new HashMap<>();

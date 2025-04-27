@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface TokenRepository extends CrudRepository<Token, String> {
     Optional<Token> findByAccessToken(String accessToken);
     Optional<Token> findByProviderId(String providerId);
+    Optional<Token> deleteByRefreshToken(String refreshToken);
+    Optional<Token> deleteByProviderId(String providerId);
 }
