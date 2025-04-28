@@ -54,6 +54,8 @@ public enum ErrorStatus implements BaseErrorCode {
     SEARCH_CONDITION_INVALID(HttpStatus.BAD_REQUEST, "SEARCH_001", "검색 조건이 하나라도 존재해야 합니다."),
     RECREATION_NOT_FOUND(HttpStatus.NOT_FOUND, "SEARCH_001", "검색 결과가 존재하지 않습니다."),
 
+    // Calendar 관련
+    CALENDAR_NOT_FOUND(HttpStatus.NOT_FOUND, "CALENDAR_001", "산책 달력 내용이 없습니다."),
 
     ;
 
