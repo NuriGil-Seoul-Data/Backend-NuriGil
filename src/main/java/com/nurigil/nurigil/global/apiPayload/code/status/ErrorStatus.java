@@ -33,6 +33,9 @@ public enum ErrorStatus implements BaseErrorCode {
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "AUTH_006", "비밀번호가 일치하지 않습니다."),
     INVALID_REQUEST_INFO(HttpStatus.UNAUTHORIZED, "AUTH_007", "카카오 정보 불러오기에 실패하였습니다."),
     AUTH_INVALID_CODE(HttpStatus.UNAUTHORIZED, "AUTH_008", "코드가 유효하지 않습니다."),
+    ILLEGAL_REGISTRATION_ID(HttpStatus.BAD_REQUEST, "AUTH_009", "허용되지 않은 소셜 로그인 경로입니다."),
+    INVALID_LOGIN_EMAIL(HttpStatus.UNAUTHORIZED, "AUTH_010", "존재하지 않는 이메일입니다."),
+
 
     // Member 관련
     MEMBER_ID_NULL(HttpStatus.BAD_REQUEST, "MEMBER_4001", "사용자 아이디는 필수 입니다."),
