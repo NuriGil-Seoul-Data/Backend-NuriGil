@@ -43,8 +43,9 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
-            "/courses/**",
-            "/members/**"
+            //"/courses/**",
+            //"/members/**"
+            "/member/**"
     };
 
     @Bean
@@ -61,8 +62,8 @@ public class SecurityConfig {
                                 // 로그인 관련 접근
                                 new AntPathRequestMatcher("/api/**"),
                                 new AntPathRequestMatcher("/oauth2/**"),
-                                new AntPathRequestMatcher("/auth/token"),
-                                new AntPathRequestMatcher("/members/**") // 이메일 로그인 및 회원가입
+                                new AntPathRequestMatcher("/auth/token")
+                                //new AntPathRequestMatcher("/members/**") // 이메일 로그인 및 회원가입
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

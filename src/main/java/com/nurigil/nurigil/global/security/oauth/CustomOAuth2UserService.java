@@ -43,13 +43,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuth2UserAttributes);
 
         // 멤버 회원 가입 및 로그인
-        Member member = getOrSave(oAuth2UserInfo, registrationId, userNameAttributeName);
+        Member member = getOrSave(oAuth2UserInfo);
 
         // oAuth2User로 변환
         return new PrincipalDetails(member, oAuth2UserInfo.attributes(), userNameAttributeName);
     }
 
-    private Member getOrSave(OAuth2UserInfo oAuth2UserInfo, String registrationId, String userNameAttributeName) {
+    private Member getOrSave(OAuth2UserInfo oAuth2UserInfo) {
         // 로그인 및 회원가입
         Member member = memberRepository.findByEmail(oAuth2UserInfo.email())
                 .orElseGet(() -> {

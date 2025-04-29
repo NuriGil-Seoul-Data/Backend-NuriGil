@@ -4,10 +4,12 @@ import com.nurigil.nurigil.global.domain.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,8 +27,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 권한이 필요 없다면 Collections.emptyList()
-        return Collections.emptyList();
+        return List.of(new SimpleGrantedAuthority(member.getRole().getKey()));
     }
 
     @Override

@@ -58,6 +58,9 @@ public class TokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expireTime);
 
+        System.out.println(authentication.getPrincipal() + "여기에서 토큰생성이 이루어짐, Role 확인");
+        System.out.println(authentication.getAuthorities());
+
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining());

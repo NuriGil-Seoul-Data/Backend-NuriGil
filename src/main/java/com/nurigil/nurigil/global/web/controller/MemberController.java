@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @CrossOrigin
 @Slf4j
-@RequestMapping("/members")
+@RequestMapping("/member")
 @Tag(name = "멤버 API", description = "멤버 API입니다.")
 public class MemberController {
 

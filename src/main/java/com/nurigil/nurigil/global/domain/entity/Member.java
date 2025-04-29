@@ -40,6 +40,7 @@ public class Member extends BaseEntity {
 
     private String refreshToken;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Builder.Default

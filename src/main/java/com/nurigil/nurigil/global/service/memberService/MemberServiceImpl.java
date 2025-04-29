@@ -4,6 +4,7 @@ import com.nurigil.nurigil.global.apiPayload.code.status.ErrorStatus;
 import com.nurigil.nurigil.global.apiPayload.exception.GeneralException;
 import com.nurigil.nurigil.global.apiPayload.exception.auth.CustomAuthException;
 import com.nurigil.nurigil.global.domain.entity.Member;
+import com.nurigil.nurigil.global.domain.entity.type.Role;
 import com.nurigil.nurigil.global.repository.MemberRepository;
 import com.nurigil.nurigil.global.security.Token.TokenProvider;
 import com.nurigil.nurigil.global.security.principal.PrincipalDetails;
@@ -40,6 +41,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = Member.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.USER)
                 .build();
 
         memberRepository.save(member);
@@ -60,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
 
         // authentication 생성
         PrincipalDetails principalDetails = new PrincipalDetails(member, Collections.emptyMap(), "email");
-        Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, Collections.emptyList());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
 
         // 토큰 생성
         String accessToken = tokenProvider.generateAccessToken(authentication); // accessToken은 클라이언트가 들고다님
